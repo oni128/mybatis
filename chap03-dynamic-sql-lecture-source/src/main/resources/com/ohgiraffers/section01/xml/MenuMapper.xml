@@ -147,6 +147,29 @@
             </if>
         </trim>
     </select>
+    <!--DML이 숫자이기 때문에 resultType쓰면 안됨-->
+    <update id="updateMenu" parameterType="hashmap">
+        UPDATE
+                TBL_MENU
+<!--        <set>-->
+<!--            <if test="menuName !=null and menuName != ''">-->
+<!--                MENU_NAME = #{menuName}-->
+<!--            </if>-->
+<!--            <if test="orderableStatus != null and orderableStatus != ''">-->
+<!--              , ORDERABLE_STATUS = #{orderableStatus}-->
+<!--            </if>-->
+<!--        </set>-->
+<!--         WHERE MENU_CODE = #{menuCode}-->
+        <trim prefix="SET" prefixOverrides=",">
+            <if test="menuName !=null and menuName != ''">
+                MENU_NAME = #{menuName}
+            </if>
+            <if test="orderableStatus != null and orderableStatus != ''">
+                , ORDERABLE_STATUS = #{orderableStatus}
+            </if>
+        </trim>
+        WHERE MENU_CODE = #{menuCode}
+    </update>
+
 </mapper>
 
-<!-- 동적쿼리 where, trim -->
