@@ -95,4 +95,58 @@
             </when>
         </choose>
     </select>
+    <select id="searchMenuByRandomMenuCode" parameterType="list" resultMap="menuResultMap">
+        SELECT
+               A.MENU_CODE
+             , A.MENU_NAME
+             , A.MENU_PRICE
+             , A.CATEGORY_CODE
+             , A.ORDERABLE_STATUS
+          FROM TBL_MENU A
+         WHERE A.MENU_CODE IN
+        <foreach collection="list"
+                 item="menuCode" open="(" close=")" separator=", ">
+            #{menuCode}
+        </foreach>
+    </select>
+    <select id="searchMenuByCodeOrSearchAll" parameterType="com.ohgiraffers.section01.xml.SearchCriteria" resultMap="menuResultMap">
+        SELECT
+               A.MENU_CODE
+             , A.MENU_NAME
+             , A.MENU_PRICE
+             , A.CATEGORY_CODE
+             , A.ORDERABLE_STATUS
+          FROM TBL_MENU A
+        <!-- 단일행 , 다중행 모두 여기에 해당 -->
+         <if test="condition != null and condition == 'menuCode'">
+             WHERE A.MENU_CODE = ${value}
+         </if>
+    </select>
+    <select id="searchMenuByNameOrCategory" parameterType="hashmap" resultMap="menuResultMap">
+        SELECT
+               A.MENU_CODE
+             , A.MENU_NAME
+             , A.MENU_PRICE
+             , A.CATEGORY_CODE
+             , A.ORDERABLE_STATUS
+          FROM TBL_MENU A
+<!--        <where>-->
+<!--        <if test="nameValue != null">-->
+<!--             A.MENU_NAME LIKE CONCAT('%', #{nameValue}, '%')-->
+<!--        </if>-->
+<!--        <if test="categoryCode != null">-->
+<!--            AND A.CATEGORY_CODE = #{categoryCode}-->
+<!--        </if>-->
+<!--        </where>-->
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="nameValue != null">
+                A.MENU_NAME LIKE CONCAT('%', #{nameValue}, '%')
+            </if>
+            <if test="categoryCode != null">
+                AND A.CATEGORY_CODE = #{categoryCode}
+            </if>
+        </trim>
+    </select>
 </mapper>
+
+<!-- 동적쿼리 where, trim -->

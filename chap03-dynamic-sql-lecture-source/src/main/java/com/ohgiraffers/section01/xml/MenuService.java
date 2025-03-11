@@ -3,6 +3,7 @@ package com.ohgiraffers.section01.xml;
 import static com.ohgiraffers.section01.xml.Template.getSqlSession;
 
 import java.util.List;
+import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 
 public class MenuService {
@@ -33,6 +34,39 @@ public class MenuService {
         MenuMapper mapper = sqlsession.getMapper(MenuMapper.class);
 
         List<MenuDTO> menus = mapper.searchMenuBySupCategory(searchCriteria);
+        System.out.println("===== Service Layer");
+        menus.forEach(System.out::println);
+
+        sqlsession.close();
+    }
+
+    public void searchMenuByRandomMenuCode(List<Integer> randomList) {
+        SqlSession sqlsession = getSqlSession();
+        MenuMapper mapper = sqlsession.getMapper(MenuMapper.class);
+
+        List<MenuDTO> menus = mapper.searchMenuByRandomMenuCode(randomList);
+        System.out.println("===== Service Layer");
+        menus.forEach(System.out::println);
+
+        sqlsession.close();
+    }
+
+    public void searchMenuByCodeOrSearchAll(SearchCriteria searchCriteria) {
+        SqlSession sqlsession = getSqlSession();
+        MenuMapper mapper = sqlsession.getMapper(MenuMapper.class);
+
+        List<MenuDTO> menus = mapper.searchMenuByCodeOrSearchAll(searchCriteria);
+        System.out.println("===== Service Layer");
+        menus.forEach(System.out::println);
+
+        sqlsession.close();
+    }
+
+    public void searchMenuByNameOrCategory(Map<String, Object> criteria) {
+        SqlSession sqlsession = getSqlSession();
+        MenuMapper mapper = sqlsession.getMapper(MenuMapper.class);
+
+        List<MenuDTO> menus = mapper.searchMenuByNameOrCategory(criteria);
         System.out.println("===== Service Layer");
         menus.forEach(System.out::println);
 
