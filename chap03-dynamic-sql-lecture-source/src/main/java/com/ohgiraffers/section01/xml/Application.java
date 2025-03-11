@@ -20,6 +20,7 @@ public class Application {
                     ifSubMenu();
                     break;
                 case 2:
+                    chooseSubMenu();
                     break;
                 case 3:
                     break;
@@ -33,6 +34,33 @@ public class Application {
             }
         } while(true);
 
+    }
+
+    private static void chooseSubMenu() {
+        Scanner sc = new Scanner(System.in);
+        MenuService ms = new MenuService();
+        do {
+            System.out.println(" ====== choose 서브 메뉴 ======");
+            System.out.println(" 1. 카테고리 상위 분류별 메뉴 보여주기(식사, 음료, 디저트)");
+            System.out.println(" 9. 이전 메뉴로");
+            System.out.print("메뉴 번호를 입력해 주세요: ");
+            int no = sc.nextInt();
+            switch (no) {
+                case 1:
+                    ms.searchMenuBySupCategory(inputSupCategory());
+                    break;
+                case 9:
+                    return;
+            }
+        } while (true);
+    }
+
+    private static SearchCriteria inputSupCategory() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("상위 분류를 입력해 주세요(식사, 음료, 디저트): ");
+        String value = sc.nextLine();
+
+        return new SearchCriteria("category", value);
     }
 
     private static void ifSubMenu() {
@@ -59,8 +87,14 @@ public class Application {
         } while (true);
     }
 
-    private static Object inputSearchCriteria() {
-        return null;
+    private static SearchCriteria inputSearchCriteria() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("검색 기준을 입력해 주세요(name or category) : ");
+        String condition = sc.nextLine();
+        System.out.println("검색어를 입력해 주세요: ");
+        String value = sc.nextLine();
+
+        return new SearchCriteria(condition, value); // 하나의 ~로 묶어서 서비스로 던짐(컨트롤러 역할)
     }
 
     private static int inputPrice() {

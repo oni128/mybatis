@@ -15,4 +15,27 @@ public class MenuService {
         menus.forEach(System.out::println);
         sqlSession.close();
     }
+
+    public void searchMenu(SearchCriteria searchCriteria) {
+        SqlSession sqlsession = getSqlSession();
+        // 인터페이스의 하위구현체를 주세요 - DAO계층에 있는 메소드 호출?
+        MenuMapper mapper = sqlsession.getMapper(MenuMapper.class);
+        List<MenuDTO> menus = mapper.searchMenu(searchCriteria); // 다중행 조회가 가능
+        // 인터페이스에 추상메소드가 생긴다? searchCriteria라는
+        System.out.println("===== Service Layer");
+        menus.forEach(System.out::println);
+
+        sqlsession.close();
+    }
+
+    public void searchMenuBySupCategory(SearchCriteria searchCriteria) {
+        SqlSession sqlsession = getSqlSession();
+        MenuMapper mapper = sqlsession.getMapper(MenuMapper.class);
+
+        List<MenuDTO> menus = mapper.searchMenuBySupCategory(searchCriteria);
+        System.out.println("===== Service Layer");
+        menus.forEach(System.out::println);
+
+        sqlsession.close();
+    }
 }

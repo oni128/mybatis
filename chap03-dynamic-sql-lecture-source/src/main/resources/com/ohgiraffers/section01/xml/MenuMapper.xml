@@ -50,4 +50,49 @@
             AND A.MENU_PRICE BETWEEN 30000 AND #{maxPrice}
         </if>
     </select>
+
+    <select id="searchMenu" parameterType="com.ohgiraffers.section01.xml.SearchCriteria"
+    resultMap="menuResultMap"> <!-- 결국 MenuDTO?로 치환되어야 한다.-->
+        SELECT
+               A.MENU_CODE
+             , A.MENU_NAME
+             , A.MENU_PRICE
+             , A.CATEGORY_CODE
+             , A.ORDERABLE_STATUS
+          FROM TBL_MENU A
+        <if test="condition == 'category'">
+            JOIN TBL_CATEGORY B ON (A.CATEGORY_CODE = B.CATEGORY_CODE)
+        </if>
+        WHERE ORDERABLE_STATUS = 'Y'
+        <if test="condition == 'name'">
+<!--            AND A.MENU_NAME = #{value}-->
+            AND A.MENU_NAME LIKE CONCAT('%', #{value}, '%')
+        </if>
+        <if test="condition == 'category'">
+            AND B.CATEGORY_NAME = #{value}
+        </if>
+        ORDER BY 1 DESC
+    </select>
+    <select id="searchMenuBySupCategory" parameterType="com.ohgiraffers.section01.xml.SearchCriteria"
+    resultMap="menuResultMap">
+        SELECT
+               A.MENU_CODE
+             , A.MENU_NAME
+             , A.MENU_PRICE
+             , A.CATEGORY_CODE
+             , A.ORDERABLE_STATUS
+          FROM TBL_MENU A
+        WHERE ORDERABLE_STATUS = 'Y'
+        <choose> <!--switch문처럼 범위를 줌-->
+            <when test="value eq '식사'"> <!--eq ,== 같음-->
+                AND A.CATEGORY_CODE IN (4,5,6,7)
+            </when>
+            <when test="value == '음료'">
+                AND A.CATEGORY_CODE IN (8,9,10)
+            </when>
+            <when test="value == '디저트'">
+                AND A.CATEGORY_CODE IN (11,12)
+            </when>
+        </choose>
+    </select>
 </mapper>
